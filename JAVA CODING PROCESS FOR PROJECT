@@ -1,0 +1,141 @@
+public class Transaction {
+    private String type; // Income or Expense
+    private double amount;
+    private String category;
+    private String date;
+
+    public Transaction(String type, double amount, String category, String date) {
+        this.type = type;
+        this.amount = amount;
+        this.category = category;
+        this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    @Override
+    public String toString() {
+        return date + " | " + type + " | " + category + " | ₹" + amount;
+    }
+
+}
+import java.util.ArrayList;
+import java.util.List;
+
+public class TrackerService {
+    private final List<Transaction> transactions;
+    private double balance;
+
+    public TrackerService() {
+        transactions = new ArrayList<>();
+        balance = 0.0;
+    }
+
+    public void addIncome(double amount, String category, String date) {
+        transactions.add(new Transaction("Income", amount, category, date));
+        balance += amount;
+    }
+
+    public void addExpense(double amount, String category, String date) {
+        transactions.add(new Transaction("Expense", amount, category, date));
+        balance -= amount;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+}
+import java.util.Scanner;
+
+public class FinanceTracker {
+    public static void main(String[] args) {
+        TrackerService trackerService = new TrackerService();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n--- Personal Finance Tracker ---");
+            System.out.println("1. Add Income");
+            System.out.println("2. Add Expense");
+            System.out.println("3. View Transactions");
+            System.out.println("4. View Balance");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Income Amount: ₹");
+                    double incomeAmount = scanner.nextDouble();
+                    scanner.nextLine();
+                    System.out.print("Enter Income Category: ");
+                    String incomeCategory = scanner.nextLine();
+                    System.out.print("Enter Date (YYYY-MM-DD): ");
+                    String incomeDate = scanner.nextLine();
+                    trackerService.addIncome(incomeAmount, incomeCategory, incomeDate);
+                    System.out.println("Income Added Successfully!");
+                    break;
+
+                case 2:
+                    System.out.print("Enter Expense Amount: ₹");
+                    double expenseAmount = scanner.nextDouble();
+                    scanner.nextLine();
+                    System.out.print("Enter Expense Category: ");
+                    String expenseCategory = scanner.nextLine();
+                    System.out.print("Enter Date (YYYY-MM-DD): ");
+                    String expenseDate = scanner.nextLine();
+                    trackerService.addExpense(expenseAmount, expenseCategory, expenseDate);
+                    System.out.println("Expense Added Successfully!");
+                    break;
+
+                case 3:
+                    System.out.println("\n--- Transaction History ---");
+                    for (Transaction t : trackerService.getTransactions()) {
+                        System.out.println(t);
+                    }
+                    break;
+
+                case 4:
+                    System.out.printf("Current Balance: ₹%.2f\n", trackerService.getBalance());
+                    break;
+
+                case 5:
+                    System.out.println("Exiting... Thank you for using the Finance Tracker!");
+                    scanner.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice! Please choose a valid option.");
+            }
+        }
+    }
+}
+--- Personal Finance Tracker ---
+1. Add Income
+2. Add Expense
+3. View Transactions
+4. View Balance
+5. Exit
+Choose an option: 1
+Enter Income Amount: ₹5000
+Enter Income Category: Salary
+Enter Date (YYYY-MM-DD): 2025-03-03
+Income Added Successfully!
